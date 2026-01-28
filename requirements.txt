@@ -1,6 +1,12 @@
+# CrewAI Framework
 crewai>=0.1.0
+crewai-tools>=0.1.0
+
+# LLM and Embeddings
 huggingface-hub>=0.16.4
 sentence-transformers>=2.2.2
 transformers>=4.30.0
+
+# Utilities
 requests>=2.31.0
 python-dotenv>=1.0.0
