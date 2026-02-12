@@ -65,11 +65,18 @@ This project demonstrates CrewAI's capabilities with two distinct multi-agent wo
 
 ### Setup
 
-1. Export your Groq API key:
+Export your Groq API key:
 
 ```bash
 export GROQ_API_KEY=your_groq_api_key_here
 ```
+
+Export your Serper API key:
+
+```bash
+export SERPER_API_KEY=your_groq_api_key_here
+```
+
 
 ### Run YouTube Crew
 

@@ -1,12 +1,12 @@
 import os
-from crewai import Agent, LLM
+from crewai import Agent, LLM, Task, Crew, Process
 from crewai_tools import SerperDevTool
 
 browse_tool = SerperDevTool()
 
-print("########################")   
+# print("########################")   
 print(browse_tool.run(search_query="AI Agents for travel planning"))
-print("########################\n")
+# print("########################\n")
 
 # 1. Environment Setup
 os.environ["OPENAI_API_KEY"] = "NA"
@@ -35,3 +35,28 @@ itinerary_planner_agent = Agent(
     llm=free_llm,
     verbose=True
 )
+
+travel_research_task = Task(
+    description="Research and compile a list of must-visit places, activities, and experiences for a trip to {location}, focusing on historical sites and local cuisine. The focus in identifying potential places to include in a one-day plan",
+    expected_output="A comprehensive list of at least 10 must-visit places, activities, and experiences in {location}, with brief descriptions and reasons for their inclusion.",
+    agent=destination_research_agent
+)
+
+itinerary_planner_task = Task(
+    description="Using the researched destinations and activities, create a detailed one-day travel itinerary for a trip to {location}. Include timing, activity descriptions, dining options, and logistical details.",
+    expected_output="A detailed one-day itinerary for {location}, including a sequence or schedule of activities, dining recommendations, and any necessary logistical information.",
+    agent=itinerary_planner_agent
+)
+
+traveling_crew = Crew(
+    name="Traveling Crew",
+    agents=[destination_research_agent, itinerary_planner_agent],
+    tasks=[travel_research_task, itinerary_planner_task],
+    process=Process.sequential,
+    verbose=True
+)
+
+crew_output = traveling_crew.kickoff(inputs={"location": "CDMX"})
+
+print("Tasks Output: ", crew_output.tasks_output)
+print("Token Usage: ", crew_output.token_usage)
