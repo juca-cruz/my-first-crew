@@ -22,6 +22,7 @@ This project demonstrates CrewAI's capabilities with two distinct multi-agent wo
 - `GROQ_API_KEY` — Required for using Groq LLM models (e.g., `groq/llama-3.3-70b-versatile`)
 - `OPENAI_API_KEY` — Set to "NA" by default (not used)
 - `OTEL_SDK_DISABLED` — Set to "true" to disable OpenTelemetry
+- `SERPER_API_KEY` — Required for using SerperDevTool
 
 ## Scripts
 
@@ -74,7 +75,7 @@ export GROQ_API_KEY=your_groq_api_key_here
 Export your Serper API key:
 
 ```bash
-export SERPER_API_KEY=your_groq_api_key_here
+export SERPER_API_KEY=your_serper_api_key_here
 ```
 
 
