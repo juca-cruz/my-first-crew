@@ -1,5 +1,6 @@
 import os
 from crewai import Agent, LLM, Task, Crew, Process
+from dotenv import load_dotenv
 from crewai_tools import SerperDevTool
 
 browse_tool = SerperDevTool()
@@ -9,8 +10,17 @@ print(browse_tool.run(search_query="AI Agents for travel planning"))
 # print("########################\n")
 
 # 1. Environment Setup
+load_dotenv()  # Load from .env file
 os.environ["OPENAI_API_KEY"] = "NA"
 os.environ["OTEL_SDK_DISABLED"] = "true"
+
+# Get the Groq API key
+groq_api_key = os.getenv("GROQ_API_KEY")
+if not groq_api_key:
+    raise ValueError(
+        "GROQ_API_KEY not found! Please set it in your environment or .env file. "
+        "Get one at: https://console.groq.com"
+    )
 
 # Initialize the native CrewAI LLM with the latest supported Groq model
 free_llm = LLM(

@@ -1,0 +1,54 @@
+research_task:
+  description: >
+    Research the technical topic: {topic}.
+    Identify key definitions, principles, use cases, best practices, and potential challenges.
+    Gather relevant information from multiple credible online sources using the web search tool.
+    Synthesize the findings into a structured set of research notes.
+  expected_output: >
+    A detailed set of research notes in Markdown format, organized by key themes and concepts, that will serve as the foundation for the article.     
+  agent: technical_researcher
+
+outline_task:
+  description: >
+    Analyze the research notes provided.
+    Create a logical and comprehensive outline for a technical article on the topic.
+    Include a suggested title, main sections, subheadings, and key points to cover in each section.
+    Indicate clearly where code examples or diagrams would be beneficial using markers like [CODE EXAMPLE NEEDED].
+  expected_output: >
+    A clear article outline in Markdown format that organizes the research findings into a coherent structure (using headings and bullet points), ready for the technical writer to use as a guide for drafting the article.
+  agent: article_strategist
+  context: [research_task]
+
+writing_task:
+  description: >
+    Using the provided outline and research notes, write the initial draft of the technical article.
+    Focus on explaining the concepts clearly and engagingly.
+    Adhere to the structure defined in the outline.
+    **Generate and include accurate, well-formatted code examples within Markdown code blocks** where indicated in the outline or where necessary to illustrate concepts.
+    Ensure the code examples are correct and relevant to the surrounding text.
+  expected_output: >
+    A full draft of the technical article in Markdown format, including all sections, explanations, and code examples as specified in the outline. The draft should be coherent and ready for review and editing.
+  agent: technical_writer
+  context: [research_task, outline_task]
+
+editing_task: 
+  description: >
+    Review the complete article draft, including text and code examples.
+    Check for technical accuracy, clarity of explanation, grammatical errors, typos, logical flow, and consistency.
+    Provide suggestions for improvement or make edits directly to refine the content.
+    Ensure the code examples are correct and properly formatted.
+  expected_output: >
+    A revised version of the article draft with edits, suggestions, and corrections incorporated.
+  agent: technical_editor
+  context: [writing_task] 
+
+formatting_task:
+  description: >
+    Take the final reviewed article content.
+    Ensure it is correctly formatted as a clean, well-structured Markdown file.
+    Ensure headings, lists, code blocks, and other Markdown elements are correctly applied.
+    The final output should be the complete content of the Markdown file.
+  expected_output: >
+    The complete content of the Markdown file, fully formatted and ready for publication.
+  agent: technical_editor
+  context: [editing_task]

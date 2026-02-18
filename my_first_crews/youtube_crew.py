@@ -1,14 +1,24 @@
 import os
 from crewai import Agent, Task, Crew, Process, LLM
+from dotenv import load_dotenv
 
 # 1. Environment Setup
+load_dotenv()  # Load from .env file
 os.environ["OPENAI_API_KEY"] = "NA"
 os.environ["OTEL_SDK_DISABLED"] = "true"
+
+# Get the Groq API key
+groq_api_key = os.getenv("GROQ_API_KEY")
+if not groq_api_key:
+    raise ValueError(
+        "GROQ_API_KEY not found! Please set it in your environment or .env file. "
+        "Get one at: https://console.groq.com"
+    )
 
 # Initialize the native CrewAI LLM with the latest supported Groq model
 free_llm = LLM(
     model="groq/llama-3.3-70b-versatile",
-    api_key=os.getenv("GROQ_API_KEY"),
+    api_key=groq_api_key,
     temperature=0
 )
 
