@@ -27,11 +27,11 @@ class TechnicalWritingCrew():
     def _get_llm(self) -> LLM:
         """Initialize the native CrewAI LLM with the latest supported Groq model."""
         return LLM(
-            model="gpt-4",
+            model="gpt-4o-mini",
             api_key=os.getenv("OPENAI_API_KEY"),
-            # model="groq/llama-3.3-70b-versatile",
-            # api_key=os.getenv("GROQ_API_KEY"),
-            temperature=0
+            #model="groq/llama-3.3-70b-versatile",
+            #api_key=os.getenv("GROQ_API_KEY"),
+            #temperature=0
         )
 
     # Agents: All Agents are defined on this section. You can add as many Agents as you want, and they will be available to the Crew.

@@ -137,10 +137,6 @@ my-first-crew/
 
 ## Troubleshooting
 
-### "Failed to connect to OpenAI API"
-- **Cause**: Network is blocking api.openai.com (Cisco Umbrella/OpenDNS filter)
-- **Solution**: Ensure your network allows outbound TLS to `api.groq.com` and `google.serper.dev` instead. Contact IT to whitelist Groq API if needed.
-
 ### "ImportError: Fallback to LiteLLM is not available"
 - **Cause**: LiteLLM package not installed
 - **Solution**: Run `pip install litellm` or reinstall requirements
