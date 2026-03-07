@@ -18,6 +18,54 @@ Next, navigate to your project directory and install the dependencies:
 ```bash
 crewai install
 ```
+Note: this project expects you to run inside the project's virtual environment (for example `.venv`). If you use a virtualenv, activate it before installing packages and running the crew.
+
+Install LiteLLM runtime (package name `litellm`) into the active environment so CrewAI can fallback to it when needed:
+
+```bash
+# activate venv (example)
+source .venv/bin/activate
+
+# install litellm
+pip install litellm
+# or install all requirements
+pip install -r ../requirements.txt
+```
+
+## Quick Start
+
+1. Activate the project's virtual environment (example):
+
+```bash
+source ../.venv/bin/activate
+```
+
+2. Install dependencies:
+
+```bash
+pip install -r ../requirements.txt
+```
+
+3. Run the crew targeting the active environment:
+
+```bash
+crewai run --active
+```
+
+## Using UV (optional)
+
+You can use `uv` to manage project dependencies (add/update packages). Example:
+
+```bash
+# install uv if you don't have it
+pip install uv
+
+# add a dependency to the project
+uv add <package-name>
+```
+
+Always activate your virtual environment after modifying dependencies so
+the running Python process has access to newly added packages.
 ### Customizing
 
 **Add your `OPENAI_API_KEY` into the `.env` file**
@@ -32,7 +80,8 @@ crewai install
 To kickstart your crew of AI agents and begin task execution, run this from the root folder of your project:
 
 ```bash
-$ crewai run
+# prefer targeting the active virtual environment to avoid mismatched venv warnings
+crewai run --active
 ```
 
 This command initializes the technical_writing_crew Crew, assembling the agents and assigning them tasks as defined in your configuration.

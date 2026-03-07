@@ -19,6 +19,45 @@ This project demonstrates CrewAI's capabilities with multiple multi-agent workfl
 - LiteLLM (for provider fallback to Groq and other models)
 - Network access for model APIs
 
+## Quick Start
+
+1. Activate the project's virtual environment (example):
+
+```bash
+source .venv/bin/activate
+```
+
+2. Install dependencies (including `litellm`):
+
+```bash
+pip install -r requirements.txt
+```
+
+3. Run a crew (target the active venv to avoid fallback warnings):
+
+```bash
+crewai run --active
+```
+	- Note: the Python package name is `litellm` (provides LiteLLM runtime)
+
+## Using UV (optional)
+
+This project uses `uv` for dependency management in some workflows. You can
+use `uv` to add packages to the project environment from the `technical_writing_crew`
+directory. Example:
+
+```bash
+# install uv if you don't have it
+pip install uv
+
+# add a dependency to the project environment
+uv add <package-name>
+```
+
+Note: `uv add` modifies the project dependency metadata; you should still
+activate your virtual environment before running crews to ensure packages are
+available to the running Python process.
+
 ## Environment Variables
 
 - `GROQ_API_KEY` — **Required** for using Groq LLM models (e.g., `groq/llama-3.3-70b-versatile`)
@@ -140,6 +179,45 @@ my-first-crew/
 ### "ImportError: Fallback to LiteLLM is not available"
 - **Cause**: LiteLLM package not installed
 - **Solution**: Run `pip install litellm` or reinstall requirements
+ - **Cause**: LiteLLM runtime (`litellm`) is not available in the Python
+	 environment that is running the Crew. This commonly happens when `pip`
+	 installs packages into a different Python/venv than the one used to run
+	 the crew, or when the virtual environment is not activated.
+ - **Solution**:
+	 - Activate your project's virtual environment (example):
+
+		 ```bash
+		 source .venv/bin/activate
+		 ```
+
+	 - Install `litellm` into the active environment:
+
+		 ```bash
+		 pip install litellm
+		 # or install all requirements
+		 pip install -r requirements.txt
+		 ```
+
+	 - Verify the installation and that you're using the correct Python:
+
+		 ```bash
+		 python -c "import litellm, sys; print('litellm', getattr(litellm,'__version__','unknown'))"
+		 python -c "from crewai import LLM; print('crewai.LLM import OK')"
+		 ```
+
+	 - When running `crewai run`, if you see a warning about the virtual
+		 environment path not matching (for example: `VIRTUAL_ENV=... does not
+		 match the project environment path .venv`), use the `--active` flag to
+		 target the currently active environment:
+
+		 ```bash
+		 # from the technical_writing_crew directory
+		 crewai run --active
+		 ```
+
+	 - If the error persists, confirm there are no multiple Python installs
+		 shadowing each other and ensure `pip` installs to the same `python`
+		 executable used to run the crew (use `which python` / `which pip`).
 
 ### "GROQ_API_KEY not set" or "SERPER_API_KEY not set"
 - **Cause**: Environment variables not exported

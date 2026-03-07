@@ -1,4 +1,5 @@
 import os
+import litellm
 from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
 from crewai_tools import SerperDevTool
@@ -10,9 +11,14 @@ from dotenv import load_dotenv
 
 # 1. Environment Setup
 # Load environment variables from .env file
-load_dotenv()
+#load_dotenv()
+os.environ["OPENAI_API_KEY"] = "NA"
 os.environ["OTEL_SDK_DISABLED"] = "true"
-
+# stop the library from attempting to load these standard logging objects
+os.environ["LITELLM_MODE"] = "production"
+os.environ["LITELLM_LOG"] = "INFO"
+litellm.set_verbose = False
+litellm.suppress_debug_info = True
 
 @CrewBase
 class TechnicalWritingCrew():
@@ -24,27 +30,29 @@ class TechnicalWritingCrew():
     agents_config = 'config/agents.yaml'
     tasks_config = 'config/tasks.yaml'
 
-    def _get_llm(self) -> LLM:
-        """Initialize the native CrewAI LLM with the latest supported Groq model."""
+    def _get_llm(self, model_name="groq/llama-3.3-70b-versatile") -> LLM:
         return LLM(
-            model="gpt-4o-mini",
-            api_key=os.getenv("OPENAI_API_KEY"),
-            #model="groq/llama-3.3-70b-versatile",
-            #api_key=os.getenv("GROQ_API_KEY"),
-            #temperature=0
-        )
+            model=model_name,
+            api_key=os.getenv("GROQ_API_KEY"),
+            temperature=0,
+            # Keep this around 2000-3000 to avoid hitting limits 
+            # when the agent receives large search results
+            max_tokens=2000
+        )    
 
     # Agents: All Agents are defined on this section. You can add as many Agents as you want, and they will be available to the Crew.
     @agent
     def technical_researcher(self) -> Agent:
-        web_search_tool = SerperDevTool()
-
         return Agent(
             config=self.agents_config['technical_researcher'],
-            tools=[web_search_tool],
-            allow_delegation=False,
-            llm=self._get_llm(),
-            verbose=True
+            tools=[SerperDevTool(n_results=3)],
+            # Switch to 8b to stay under rate limits during heavy searching
+            llm=self._get_llm("groq/llama-3.1-8b-instant"), 
+            verbose=True,
+            # Slower cadence to avoid Groq's 429 error
+            max_rpm=1, 
+            # Limits the agent from getting stuck in long loops
+            max_iter=3
         )
 
     @agent

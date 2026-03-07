@@ -1,2 +1,3 @@
 .DS_Store
 *.lock
+/technical_writing_crew/src/technical_writing_crew/__pycache__
